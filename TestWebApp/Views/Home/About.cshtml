@@ -1,7 +1,15 @@
-﻿@{
+﻿@model EmailViewModel
+@{
     ViewData["Title"] = "About";
 }
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
 <p>Use this area to provide additional information.</p>
+
+<form asp-controller="Home" asp-action="SendEmail" method="get">
+    <input asp-for="Email" placeholder="Email" class="form-control" />
+    <input asp-for="Name" placeholder="Name" class="form-control" />
+
+    <button type="submit">Send Email</button>
+</form>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using EmailClient.Services;
 using Microsoft.AspNetCore.Mvc;
 using TestWebApp.Models;
 
@@ -10,6 +11,13 @@ namespace TestWebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IEmailClientSender emailClientSender;
+
+        public HomeController(IEmailClientSender emailClientSender)
+        {
+            this.emailClientSender = emailClientSender;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -20,6 +28,13 @@ namespace TestWebApp.Controllers
             ViewData["Message"] = "Your application description page.";
 
             return View();
+        }
+
+        public async Task<IActionResult> SendEmail(EmailViewModel emailViewModel)
+        {
+            await emailClientSender.SendHelloWorldEmail(emailViewModel.Email, emailViewModel.Name);
+
+            return RedirectToAction("About");
         }
 
         public IActionResult Contact()

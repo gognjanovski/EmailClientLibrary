@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EmailClient;
+using EmailClient.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +33,9 @@ namespace TestWebApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            var emailSettings = Configuration.GetSection("EmailSettings");
+            services.Configure<EmailSettings>(emailSettings);
+            services.AddTransient<IEmailClientSender, EmailClientSender>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
