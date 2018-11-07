@@ -29,7 +29,7 @@ namespace EmailClient.Services
             var body = renderer.UsingTemplateFromEmbedded(template,
                 new HelloWorldViewModel { Name = name });
 
-            await SendEmailAsync(email, "Потврдете го вашиот е-маил", body);
+            await SendEmailAsync(email, "Email Subject", body);
         }
 
         private async Task SendEmailAsync(string email, string subject, string message)
