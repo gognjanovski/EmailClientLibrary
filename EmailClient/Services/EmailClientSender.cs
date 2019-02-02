@@ -1,5 +1,6 @@
 ﻿using EmailClient.Helpers;
 using EmailClient.Models;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -14,10 +15,12 @@ namespace EmailClient.Services
     public class EmailClientSender : IEmailClientSender
     {
         private readonly EmailSettings _emailSettings;
+        private readonly IMemoryCache memoryCache;
 
-        public EmailClientSender(IOptions<EmailSettings> emailSettings)
+        public EmailClientSender(IOptions<EmailSettings> emailSettings, IMemoryCache memoryCache)
         {
             this._emailSettings = emailSettings.Value;
+            this.memoryCache = memoryCache;
         }
 
 
@@ -25,7 +28,7 @@ namespace EmailClient.Services
         {
             string template = "Templates.HelloWorldTemplate";
 
-            RazorParser renderer = new RazorParser(typeof(EmailClient).Assembly);
+            RazorParser renderer = new RazorParser(typeof(EmailClient).Assembly, memoryCache);
             var body = renderer.UsingTemplateFromEmbedded(template,
                 new HelloWorldViewModel { Name = name });
 
